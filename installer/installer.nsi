@@ -5,7 +5,7 @@
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
 !define INSTALLER_NAME "ACTA_-_VFC_1.0.exe"
-!define PRODUCT_ICON "glossyorb.ico"
+!define PRODUCT_ICON "acta.ico"
 
 ; Marker file to tell the uninstaller that it's a user installation
 !define USER_INSTALL_MARKER _user_install_marker
@@ -29,8 +29,8 @@ SetCompressor lzma
 ; Modern UI installer stuff
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "glossyorb.ico"
-!define MUI_UNICON "glossyorb.ico"
+!define MUI_ICON "acta.ico"
+!define MUI_UNICON "acta.ico"
 
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
@@ -68,7 +68,7 @@ Section "!${PRODUCT_NAME}" sec_app
 
       ; Install files
     SetOutPath "$INSTDIR"
-      File "glossyorb.ico"
+      File "acta.ico"
       File "ACTA_-_VFC.launch.pyw"
       File "python-3.10.1-amd64.exe"
     ExecWait "$INSTDIR\python-3.10.1-amd64.exe"
@@ -135,7 +135,7 @@ Section "!${PRODUCT_NAME}" sec_app
   ; The output path becomes the working directory for shortcuts
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
     CreateShortCut "$SMPROGRAMS\ACTA_-_VFC.lnk" "$INSTDIR\Python\pythonw.exe" \
-      '"$INSTDIR\ACTA_-_VFC.launch.pyw"' "$INSTDIR\glossyorb.ico"
+      '"$INSTDIR\ACTA_-_VFC.launch.pyw"' "$INSTDIR\acta.ico"
   SetOutPath "$INSTDIR"
 
 
@@ -184,7 +184,7 @@ Section "Uninstall"
   ; Remove ourselves from %PATH%
 
   ; Uninstall files
-    Delete "$INSTDIR\glossyorb.ico"
+    Delete "$INSTDIR\acta.ico"
     Delete "$INSTDIR\ACTA_-_VFC.launch.pyw"
     Delete "$INSTDIR\python-3.10.1-amd64.exe"
   ; Uninstall directories
