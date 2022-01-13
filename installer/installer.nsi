@@ -192,7 +192,7 @@ Section "Uninstall"
     RMDir /r "$INSTDIR\BART"
 
   ; Uninstall shortcuts
-      Delete "$SMPROGRAMS\My App.lnk"
+      Delete "$SMPROGRAMS\ACTA-VFC.lnk"
   RMDir $INSTDIR
   DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
