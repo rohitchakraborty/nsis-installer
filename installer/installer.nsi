@@ -1,10 +1,10 @@
-!define PRODUCT_NAME "ACTA - VFC"
+!define PRODUCT_NAME "ACTA-VFC"
 !define PRODUCT_VERSION "1.0"
 !define PY_VERSION "3.10.0"
 !define PY_MAJOR_VERSION "3.10"
 !define BITNESS "64"
 !define ARCH_TAG ".amd64"
-!define INSTALLER_NAME "ACTA_-_VFC_1.0.exe"
+!define INSTALLER_NAME "ACTA-VFC_1.0.exe"
 !define PRODUCT_ICON "acta.ico"
 
 ; Marker file to tell the uninstaller that it's a user installation
@@ -18,10 +18,9 @@ SetCompressor lzma
 !endif
 
 !define MULTIUSER_EXECUTIONLEVEL Highest
-!define MULTIUSER_INSTALLMODE_DEFAULT_CURRENTUSER
 !define MULTIUSER_MUI
 !define MULTIUSER_INSTALLMODE_COMMANDLINE
-!define MULTIUSER_INSTALLMODE_INSTDIR "ACTA - VFC"
+!define MULTIUSER_INSTALLMODE_INSTDIR "ACTA-VFC"
 !define MULTIUSER_INSTALLMODE_FUNCTION correct_prog_files
 !include MultiUser.nsh
 !include FileFunc.nsh
@@ -59,6 +58,7 @@ Section "!${PRODUCT_NAME}" sec_app
   SetOutPath "$INSTDIR\pkgs"
   File /r "pkgs\*.*"
   SetOutPath "$INSTDIR"
+  Call ClientCheck
 
   ; Marker file for per-user install
   StrCmp $MultiUser.InstallMode CurrentUser 0 +3
@@ -69,7 +69,7 @@ Section "!${PRODUCT_NAME}" sec_app
       ; Install files
     SetOutPath "$INSTDIR"
       File "acta.ico"
-      File "ACTA_-_VFC.launch.pyw"
+      File "ACTA-VFC.launch.pyw"
       File "python-3.10.1-amd64.exe"
     ExecWait "$INSTDIR\python-3.10.1-amd64.exe"
 
@@ -134,8 +134,8 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
-    CreateShortCut "$SMPROGRAMS\ACTA_-_VFC.lnk" "$INSTDIR\Python\pythonw.exe" \
-      '"$INSTDIR\ACTA_-_VFC.launch.pyw"' "$INSTDIR\acta.ico"
+    CreateShortCut "$SMPROGRAMS\ACTA-VFC.lnk" "$INSTDIR\Python\pythonw.exe" \
+      '"$INSTDIR\ACTA-VFC.launch.pyw"' "$INSTDIR\acta.ico"
   SetOutPath "$INSTDIR"
 
 
@@ -185,7 +185,7 @@ Section "Uninstall"
 
   ; Uninstall files
     Delete "$INSTDIR\acta.ico"
-    Delete "$INSTDIR\ACTA_-_VFC.launch.pyw"
+    Delete "$INSTDIR\ACTA-VFC.launch.pyw"
     Delete "$INSTDIR\python-3.10.1-amd64.exe"
   ; Uninstall directories
     RMDir /r "$INSTDIR\Python"
@@ -249,4 +249,19 @@ FunctionEnd
 
 Function un.delete_task
   ExecWait '"$INSTDIR\BART\venv\Scripts\python.exe" "$INSTDIR\BART\task_scheduler\task.py" delete'
+FunctionEnd
+
+Function ClientCheck
+  ReadRegStr $2 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString"
+  ${If} ${Errors}
+    DetailPrint "Not installed"
+  ${Else}
+    MessageBox MB_OKCANCEL|MB_ICONSTOP "You are trying to install over an existing installation \
+        of ACTA-VFC.$\nPlease uninstall the existing version and run the installer again by \
+        clicking on $\"Ok$\" or click on $\"Cancel$\" to abort this installation." \
+    /SD IDOK IDCANCEL done
+    ExecWait $2
+  done:
+    Quit
+  ${EndIf}
 FunctionEnd
