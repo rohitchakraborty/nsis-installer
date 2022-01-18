@@ -136,6 +136,8 @@ Section "!${PRODUCT_NAME}" sec_app
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
     CreateShortCut "$SMPROGRAMS\ACTA_Surveyor_Edition.lnk" "$INSTDIR\Python\pythonw.exe" \
       '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
+    CreateShortCut "$Desktop\ACTA_Surveyor_Edition.lnk" "$INSTDIR\Python\pythonw.exe" \
+      '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
   SetOutPath "$INSTDIR"
 
 
@@ -193,6 +195,7 @@ Section "Uninstall"
 
   ; Uninstall shortcuts
       Delete "$SMPROGRAMS\ACTA_Surveyor_Edition.lnk"
+      Delete "$Desktop\ACTA_Surveyor_Edition.lnk"
   RMDir $INSTDIR
   DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
