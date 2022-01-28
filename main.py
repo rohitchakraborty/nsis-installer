@@ -8,4 +8,4 @@ def main():
     subprocess.run(command)
     command = "schtasks.exe /RUN /TN " + task_name
     subprocess.run(command)
-    messagebox.showinfo(title=task_name, message="Restart successful")
+    messagebox.showinfo(title=task_name, message="Started successfully")
