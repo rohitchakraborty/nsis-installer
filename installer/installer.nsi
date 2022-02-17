@@ -134,9 +134,9 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
-    CreateShortCut "$SMPROGRAMS\ACTA_Surveyor_Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
+    CreateShortCut "$SMPROGRAMS\ACTA Surveyor Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
       '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
-    CreateShortCut "$Desktop\ACTA_Surveyor_Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
+    CreateShortCut "$Desktop\ACTA Surveyor Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
       '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
   SetOutPath "$INSTDIR"
 
@@ -194,8 +194,8 @@ Section "Uninstall"
     RMDir /r "$INSTDIR\BART"
 
   ; Uninstall shortcuts
-      Delete "$SMPROGRAMS\ACTA_Surveyor_Edition.lnk"
-      Delete "$Desktop\ACTA_Surveyor_Edition.lnk"
+      Delete "$SMPROGRAMS\ACTA Surveyor Edition.lnk"
+      Delete "$Desktop\ACTA Surveyor Edition.lnk"
   RMDir $INSTDIR
   DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
