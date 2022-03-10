@@ -82,6 +82,7 @@ Section "!${PRODUCT_NAME}" sec_app
 
     Call create_virtual_env
     Call create_task
+    Call copy_license
 
 
     ; Install MSVCRT if it's not already on the system
@@ -267,4 +268,8 @@ Function ClientCheck
   done:
     Quit
   ${EndIf}
+FunctionEnd
+
+Function copy_license
+    CopyFiles "$EXEDIR\license.json" "$INSTDIR\BART\license.json"
 FunctionEnd
