@@ -156,7 +156,7 @@ Section "!${PRODUCT_NAME}" sec_app
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
     WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
-                     "Publisher" "Enkindle"
+                     "Publisher" "Metaflow Inc."
   WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
                    "DisplayVersion" "${PRODUCT_VERSION}"
   WriteRegDWORD SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
