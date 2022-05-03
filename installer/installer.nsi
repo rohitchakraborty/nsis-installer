@@ -272,4 +272,5 @@ FunctionEnd
 
 Function copy_license
     CopyFiles "$EXEDIR\license.json" "$INSTDIR\BART\license.json"
+    Delete "$EXEDIR\license.json"
 FunctionEnd
