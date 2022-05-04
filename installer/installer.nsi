@@ -59,6 +59,7 @@ Section "!${PRODUCT_NAME}" sec_app
   File /r "pkgs\*.*"
   SetOutPath "$INSTDIR"
   Call ClientCheck
+  Call check_license
 
   ; Marker file for per-user install
   StrCmp $MultiUser.InstallMode CurrentUser 0 +3
@@ -268,6 +269,14 @@ Function ClientCheck
   done:
     Quit
   ${EndIf}
+FunctionEnd
+
+Function check_license
+    IfFileExists "$EXEDIR\license.json" file_found file_not_found
+    file_not_found:
+    MessageBox MB_OK|MB_ICONSTOP "Cannot find license file. Please download the files again before installing."
+    Quit
+    file_found:
 FunctionEnd
 
 Function copy_license
