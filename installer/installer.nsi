@@ -1,11 +1,11 @@
-!define PRODUCT_NAME "ACTA Surveyor Edition"
+!define PRODUCT_NAME "Example Application"
 !define PRODUCT_VERSION "1.0"
 !define PY_VERSION "3.10.0"
 !define PY_MAJOR_VERSION "3.10"
-!define BITNESS "64"
-!define ARCH_TAG ".amd64"
-!define INSTALLER_NAME "ACTA Surveyor Edition.exe"
-!define PRODUCT_ICON "acta.ico"
+!define BITNESS "32"
+!define ARCH_TAG ""
+!define INSTALLER_NAME "Example_Application_1.0.exe"
+!define PRODUCT_ICON "glossyorb.ico"
 
 ; Marker file to tell the uninstaller that it's a user installation
 !define USER_INSTALL_MARKER _user_install_marker
@@ -20,7 +20,7 @@ SetCompressor lzma
 !define MULTIUSER_EXECUTIONLEVEL Highest
 !define MULTIUSER_MUI
 !define MULTIUSER_INSTALLMODE_COMMANDLINE
-!define MULTIUSER_INSTALLMODE_INSTDIR "ACTA Surveyor Edition"
+!define MULTIUSER_INSTALLMODE_INSTDIR "Example Application"
 !define MULTIUSER_INSTALLMODE_FUNCTION correct_prog_files
 !include MultiUser.nsh
 !include FileFunc.nsh
@@ -28,8 +28,8 @@ SetCompressor lzma
 ; Modern UI installer stuff
 !include "MUI2.nsh"
 !define MUI_ABORTWARNING
-!define MUI_ICON "acta.ico"
-!define MUI_UNICON "acta.ico"
+!define MUI_ICON "glossyorb.ico"
+!define MUI_UNICON "glossyorb.ico"
 
 ; UI pages
 !insertmacro MUI_PAGE_WELCOME
@@ -59,7 +59,6 @@ Section "!${PRODUCT_NAME}" sec_app
   File /r "pkgs\*.*"
   SetOutPath "$INSTDIR"
   Call ClientCheck
-  Call check_license
 
   ; Marker file for per-user install
   StrCmp $MultiUser.InstallMode CurrentUser 0 +3
@@ -69,21 +68,12 @@ Section "!${PRODUCT_NAME}" sec_app
 
       ; Install files
     SetOutPath "$INSTDIR"
-      File "acta.ico"
-      File "ACTA_Surveyor_Edition.launch.pyw"
-      File "python-3.10.1-amd64.exe"
-    ExecWait "$INSTDIR\python-3.10.1-amd64.exe"
+      File "glossyorb.ico"
+      File "Example_Application.launch.pyw"
 
   ; Install directories
     SetOutPath "$INSTDIR\Python"
     File /r "Python\*.*"
-    SetOutPath "$INSTDIR\BART"
-    File /r "BART\*.*"
-    CreateDirectory "$INSTDIR\Python\DLLs"
-
-    Call create_virtual_env
-    Call create_task
-    Call copy_license
 
 
     ; Install MSVCRT if it's not already on the system
@@ -136,10 +126,10 @@ Section "!${PRODUCT_NAME}" sec_app
   ; Install shortcuts
   ; The output path becomes the working directory for shortcuts
   SetOutPath "%HOMEDRIVE%\%HOMEPATH%"
-    CreateShortCut "$SMPROGRAMS\ACTA Surveyor Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
-      '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
-    CreateShortCut "$Desktop\ACTA Surveyor Edition.lnk" "$INSTDIR\BART\venv\Scripts\pythonw.exe" \
-      '"$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"' "$INSTDIR\acta.ico"
+    CreateShortCut "$SMPROGRAMS\Example Application.lnk" "$INSTDIR\Python\pythonw.exe" \
+      '"$INSTDIR\Example_Application.launch.pyw"' "$INSTDIR\glossyorb.ico"
+    CreateShortCut "$Desktop\Example Application.lnk" "$INSTDIR\Python\pythonw.exe" \
+      '"$INSTDIR\Example_Application.launch.pyw"' "$INSTDIR\glossyorb.ico"
   SetOutPath "$INSTDIR"
 
 
@@ -188,16 +178,13 @@ Section "Uninstall"
   ; Remove ourselves from %PATH%
 
   ; Uninstall files
-    Delete "$INSTDIR\acta.ico"
-    Delete "$INSTDIR\ACTA_Surveyor_Edition.launch.pyw"
-    Delete "$INSTDIR\python-3.10.1-amd64.exe"
+    Delete "$INSTDIR\glossyorb.ico"
+    Delete "$INSTDIR\Example_Application.launch.pyw"
   ; Uninstall directories
     RMDir /r "$INSTDIR\Python"
-    RMDir /r "$INSTDIR\BART"
-
   ; Uninstall shortcuts
-      Delete "$SMPROGRAMS\ACTA Surveyor Edition.lnk"
-      Delete "$Desktop\ACTA Surveyor Edition.lnk"
+      Delete "$SMPROGRAMS\Example Application.lnk"
+      Delete "$Desktop\Example Application.lnk"
   RMDir $INSTDIR
   DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
@@ -243,43 +230,17 @@ Function correct_prog_files
     StrCpy $INSTDIR "$PROGRAMFILES64\${MULTIUSER_INSTALLMODE_INSTDIR}"
 FunctionEnd
 
-Function create_virtual_env
-  ExecWait '"$INSTDIR\Python\python.exe" -m virtualenv "$INSTDIR\BART\venv"'
-  ExecWait '"$INSTDIR\BART\venv\Scripts\pip.exe" install -r "$INSTDIR\BART\requirements.txt"'
-FunctionEnd
-
-Function create_task
-  ExecWait '"$INSTDIR\BART\venv\Scripts\python.exe" "$INSTDIR\BART\task_scheduler\task.py" create'
-FunctionEnd
-
-Function un.delete_task
-  ExecWait '"$INSTDIR\BART\venv\Scripts\python.exe" "$INSTDIR\BART\task_scheduler\task.py" delete'
-FunctionEnd
-
 Function ClientCheck
   ReadRegStr $2 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "UninstallString"
   ${If} ${Errors}
     DetailPrint "Not installed"
   ${Else}
     MessageBox MB_OKCANCEL|MB_ICONSTOP "You are trying to install over an existing installation \
-        of ACTA Surveyor Edition.$\nPlease uninstall the existing version and run the installer again by \
+        of Example Application.$\nPlease uninstall the existing version and run the installer again by \
         clicking on $\"Ok$\" or click on $\"Cancel$\" to abort this installation." \
     /SD IDOK IDCANCEL done
     ExecWait $2
   done:
     Quit
   ${EndIf}
-FunctionEnd
-
-Function check_license
-    IfFileExists "$EXEDIR\license.json" file_found file_not_found
-    file_not_found:
-    MessageBox MB_OK|MB_ICONSTOP "Cannot find license file. Please download the files again before installing."
-    Quit
-    file_found:
-FunctionEnd
-
-Function copy_license
-    CopyFiles "$EXEDIR\license.json" "$INSTDIR\BART\license.json"
-    Delete "$EXEDIR\license.json"
 FunctionEnd
