@@ -164,7 +164,6 @@ Section "!${PRODUCT_NAME}" sec_app
 SectionEnd
 
 Section "Uninstall"
-  Call un.delete_task
   SetRegView 64
   SetShellVarContext all
   IfFileExists "$INSTDIR\${USER_INSTALL_MARKER}" 0 +3
